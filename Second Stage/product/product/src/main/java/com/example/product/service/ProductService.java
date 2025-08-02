@@ -23,7 +23,7 @@ public class ProductService {
 
     // Get Product by id
     public Product getProductById (Long Id) {
-        return productRepository.getReferenceById(Id);
+        return productRepository.findById(Id).orElse(null);
     }
     
     // Get all product

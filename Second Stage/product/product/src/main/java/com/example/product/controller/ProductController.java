@@ -55,8 +55,8 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public List<Product> findPriceBetween(@RequestParam int price1,@RequestParam int price2) {
-        return productService.findPriceBetween(price1, price2);
+    public List<Product> findPriceBetween(@RequestParam int min,@RequestParam int max) {
+        return productService.findPriceBetween(min, max);
     }
 
 }   
