@@ -3,6 +3,7 @@ package com.example.product.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.product.DTO.ProductRequest;
 import com.example.product.exception.ProductNotFoundException;
 import com.example.product.repository.ProductRepository;
 import com.example.product.service.model.Product;
@@ -17,8 +18,16 @@ public class ProductService {
 
     // Create product and return id (Think)
     // update product
-    public Product saveProduct (Product product) {
-        return productRepository.save(product);
+    // public Product saveProduct (Product product) {
+    //     return productRepository.save(product);
+    // }
+
+    public Product saveProduct (ProductRequest product) {
+        Product prod = new Product();
+        prod.setName(product.getName());
+        prod.setPrice(product.getPrice());
+        
+        return productRepository.save(prod);
     }
 
     // Get Product by id
@@ -29,6 +38,15 @@ public class ProductService {
     // Get all product
     public List<Product> getAllProduct(){
         return productRepository.findAll();
+    }
+
+    // Update product by id
+    public Product updateProduct(Long id, ProductRequest product){
+        Product existing = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
+
+        existing.setName(product.getName());
+        existing.setPrice(product.getPrice());
+        return productRepository.save(existing);
     }
 
     // delete Product by id 

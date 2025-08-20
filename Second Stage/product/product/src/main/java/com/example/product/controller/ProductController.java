@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.product.DTO.ProductRequest;
+import com.example.product.DTO.ProductResponse;
 import com.example.product.service.ProductService;
 import com.example.product.service.model.Product;
 
@@ -33,9 +35,21 @@ public class ProductController {
         return productService.getAllProduct();
     }
 
+    // @PostMapping
+    // public Product saveProduct(@Valid @RequestBody Product product) {
+    //     return productService.saveProduct(product);
+    // }
+
     @PostMapping
-    public Product saveProduct(@Valid @RequestBody Product product) {
-        return productService.saveProduct(product);
+    public ProductResponse saveProduct(@Valid @RequestBody ProductRequest product) {
+        
+        Product saved =  productService.saveProduct(product);
+
+        ProductResponse pRes = new ProductResponse();
+        pRes.setId(saved.getId());
+        pRes.setName(saved.getName());
+        pRes.setPrice(saved.getPrice());
+        return pRes;
     }
     
     @GetMapping("/{id}")
@@ -43,12 +57,23 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    // @PutMapping("/{id}")
+    // public Product updateProduct(@PathVariable Long id,@Valid @RequestBody Product updatedProduct){
+    //     Product product = productService.getProductById(id);
+    //     product.setName(updatedProduct.getName());
+    //     product.setPrice(updatedProduct.getPrice());
+    //     return productService.saveProduct(product);       
+    // }
+
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id,@Valid @RequestBody Product updatedProduct){
-        Product product = productService.getProductById(id);
-        product.setName(updatedProduct.getName());
-        product.setPrice(updatedProduct.getPrice());
-        return productService.saveProduct(product);       
+    public ProductResponse updateProduct(@PathVariable Long id,@Valid @RequestBody ProductRequest updatedProduct){
+        Product product = productService.updateProduct(id, updatedProduct);
+        
+        ProductResponse response = new ProductResponse();
+        response.setId(product.getId());
+        response.setName(updatedProduct.getName());
+        response.setPrice(updatedProduct.getPrice()); 
+        return response;      
     }
 
     @DeleteMapping("/{id}")
